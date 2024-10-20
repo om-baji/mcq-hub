@@ -14,9 +14,9 @@ MCQ Hub is an interactive platform built to manage Multiple Choice Questions (MC
 ## Tech Stack
 
 - **Frontend**: Next.js, Tailwind CSS
-- **Backend**: Next.js server actions, Prisma ORM, Postgres database
+- **Backend**: Next.js server actions, Mongoose, Postgres database
 - **Authentication**: NextAuth (Google and GitHub providers)
-- **Database**: Postgres, managed with Prisma ORM
+- **Database**: MongoDB
 
 ## Installation
 
@@ -35,7 +35,7 @@ To set up MCQ Hub locally, follow these steps:
 
 3. Set up your environment variables in a `.env` file:
     ```
-    DATABASE_URL=your_postgres_database_url
+    DATABASE_URL=your_mongo_database_url
     NEXTAUTH_URL=http://localhost:3000
     NEXTAUTH_SECRET=your_nextauth_secret
     GITHUB_ID=your_github_client_id
