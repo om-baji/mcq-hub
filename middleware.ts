@@ -28,6 +28,6 @@ export const config = {
     '/sign-up',
     '/',
     '/verfiy/:path*',
-    '/dashboard/:path*'
+    '/home/:path*',
   ],
 }

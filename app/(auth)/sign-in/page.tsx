@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel
@@ -65,6 +66,9 @@ const SignUp = () => {
                     <FormControl>
                       <Input placeholder="someone@gmail.com" {...field} />
                     </FormControl>
+                    {errors.identifier && (
+                      <FormDescription className="text-red-500">{errors.identifier.message}</FormDescription>
+                    )}
                   </FormItem>
                 )}
               />
@@ -78,10 +82,14 @@ const SignUp = () => {
                     <FormControl>
                       <Input placeholder="Password" {...field} type='password' />
                     </FormControl>
+                    {errors.password && (
+                      <FormDescription className="text-red-500">{errors.password.message}</FormDescription>
+                    )}
                   </FormItem>
                 )}
               />
               <Button 
+                className="space-y-4"
                 disabled={isSubmitting}
                 type="submit">{
                   isSubmitting ? "Loading..." : "Sign In"
@@ -89,7 +97,7 @@ const SignUp = () => {
             </form>
 
           </Form>
-          <Link className='text-zinc-600'
+          <Link className='text-zinc-600 space-y-4'
           href={"/sign-up"}>Dont have an account? <span className='underline text-zinc-800'>Register</span></Link>
         </div>
 

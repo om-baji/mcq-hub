@@ -1,4 +1,8 @@
 import React from 'react'
+import { ChevronRight } from "lucide-react"
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import CustomCard from '@/components/CustomCard'
 
 const page = () => {
   return (
@@ -12,11 +16,17 @@ const page = () => {
       </h3>
 
       <div>
-        Get Started
+        <Button
+          variant="outline" size="icon" className='w-35 p-2'>
+          <ChevronRight className="h-4 w-4" />
+          <Link href={"/sign-in"}>Get Started</Link>
+        </Button>
       </div>
+
+      
 
     </div>
   )
 }
 
-export default page
+export default page;

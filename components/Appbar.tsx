@@ -3,11 +3,10 @@ import React from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/hooks/use-toast'
+import { ModeToggle } from './ThemeToggle'
 
 const Appbar = () => {
   const { data: session } = useSession()
-
-  console.log(session)
 
   const router = useRouter()
 
@@ -48,6 +47,7 @@ const Appbar = () => {
               </button>
             </div>
           )}
+          {/* <ModeToggle /> */}
         </div>
       </nav>
     </header>

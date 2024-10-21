@@ -4,6 +4,7 @@ export interface MCQ extends Document{
     question : string;
     options : string[];
     comment? : string[];
+    tag : string;
 }
 
 export interface User extends Document {
@@ -35,6 +36,10 @@ const mcqSchema : Schema <MCQ> = new Schema({
     },
     comment : {
         type : [String],
+    },
+    tag : {
+        type : String,
+        required : [true,"Required Field"]
     }
 })
 
