@@ -3,7 +3,7 @@ import dbConnect from "../db";
 import { mcqModel } from "@/models/dbModels";
 import { ApiResponse } from "../types/ApiResponse";
 
-export async function getQuestion(tag : string, limit : Number){
+export async function getQuestion(tag : string, limit : number){
     await dbConnect();
 
     try {
@@ -13,7 +13,7 @@ export async function getQuestion(tag : string, limit : Number){
                  tag
             }},
             {
-                $limit : limit as number
+                $limit : limit
             }
         ])
 
