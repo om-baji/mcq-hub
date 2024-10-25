@@ -1,4 +1,5 @@
 import Appbar from "@/components/Appbar"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function DashboardLayout({
     children,
@@ -9,6 +10,7 @@ export default function DashboardLayout({
       <section>
         <Appbar />   
         {children}
+        <Toaster />
       </section>
     )
   }

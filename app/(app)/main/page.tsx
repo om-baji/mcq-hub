@@ -2,70 +2,77 @@
 import { Input } from '@/components/ui/input';
 import { MCQ } from '@/models/dbModels';
 import { getQuestion } from '@/server/actions/getQuestion';
-import { useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import Question from '@/components/Question';
 
 const page = () => {
-
-  const [questions,setQuestions] = useState<MCQ[] | null>(null);
-  const [limit,setLimit] = useState<number | null>(null);
+  const [questions, setQuestions] = useState<MCQ[] | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+  const [limit, setLimit] = useState<number | null>(null);
   const search = useSearchParams();
-
-  const tag = search.get("id")
+  const tag = search.get('id');
 
   const onFind = async () => {
     try {
-      const response = await getQuestion(tag as string,limit || 0);
-        if(!response.questions) throw new Error("Something went wrong!")
-        console.log(response)
-      
-        setQuestions(response.questions || null)
-
-        return {
-          success : true,
-          message : "Succesfull fetch"
-        }
-
+      const response = await getQuestion(tag as string, limit || 0);
+      if (!response.questions) throw new Error('Something went wrong!');
+      setQuestions(response.questions || null);
+      return { success: true, message: 'Successful fetch' };
     } catch (e) {
-      toast({
-        title : "Error fetuching questions"
-      })
-      console.log(e)
-      return {
-        success : false,
-        message : "Unsuccesfull fetch"
-      }
+      toast({ title: 'Error fetching questions' });
+      return { success: false, message: 'Unsuccessful fetch' };
     }
-  }
+  };
 
-  if(!questions) {
+  const handleQuestionSelect = (index: number) => {
+    setSelectedQuestion(index);
+  };
+
+  if (!questions) {
     return (
-      <div className='flex justify-center items-center h-screen'>
-          <Input placeholder='Enter limit' 
-          onChange={e => setLimit(parseInt(e.target.value))}
+      <div className='flex justify-center items-center h-screen bg-gray-50'>
+        <div className='flex flex-col items-center space-y-4'>
+          <Input
+            placeholder='Enter limit'
+            className='w-64 p-2 border border-gray-300 rounded shadow'
+            onChange={e => setLimit(parseInt(e.target.value))}
           />
-          <Button onClick={onFind}
-          >Find</Button>
+          <Button className='w-32' onClick={onFind}>
+            Find Questions
+          </Button> 
+        </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='flex flex-col justify-center items-center h-screen'>
-    {
-      questions.map((question) => {
-        return <Question 
-        title={question.question}
-        options={question.options}
-        tag={question.tag}
-        />
-      })
-    }
+    <div className='flex flex-col items-center h-screen bg-gray-100'>
+      <div className='flex w-full space-x-4 p-4 bg-white shadow rounded justify-evenly'>
+        {questions.map((_, index) => (
+          <Button
+            key={index}
+            className={`px-4 py-2 ${selectedQuestion === index ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'}`}
+            onClick={() => handleQuestionSelect(index)}
+          >
+            {index + 1}
+          </Button>
+        ))}
+      </div>
+      {selectedQuestion !== null && (
+        <div className='mt-6 p-2 rounded shadow w-full h-screen'>
+          <Question
+            title={questions[selectedQuestion].question}
+            options={questions[selectedQuestion].options}
+            tag={questions[selectedQuestion].tag}
+            correct={questions[selectedQuestion].correctAnswer}
+          />
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

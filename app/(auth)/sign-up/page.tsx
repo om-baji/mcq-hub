@@ -1,6 +1,5 @@
 'use client'
-import { signUpSchema, signUpTypes } from '@/schemas/signUpSchema'
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,16 +7,16 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { signup } from '@/server/actions/sign-up';
 import { toast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { signUpSchema, signUpTypes } from '@/schemas/signUpSchema';
+import { signup } from '@/server/actions/sign-up';
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { checkUsername } from '@/server/actions/usernameUnique';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from "react-hook-form";
 
 const SignUp = () => {
 
@@ -99,9 +98,9 @@ const SignUp = () => {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="Phone Number" {...field} />
                     </FormControl>
                     {errors.username ? (
                       <FormDescription className="text-red-500">{errors.username.message}</FormDescription>

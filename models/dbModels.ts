@@ -5,6 +5,7 @@ export interface MCQ extends Document{
     options : string[];
     comment? : string[];
     tag : string;
+    correctAnswer : string;
 }
 
 export interface User extends Document {
