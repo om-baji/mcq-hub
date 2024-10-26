@@ -18,6 +18,8 @@ export async function validate(id : string, correctAnswer : string) : Promise<Ap
 
         if(!question) throw new Error("Question not found!");
 
+        // console.log(question.correctAnswer)
+
         if(question.correctAnswer === correctAnswer){
             return {
                 success : true,

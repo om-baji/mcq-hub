@@ -3,7 +3,7 @@ import React from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/hooks/use-toast'
-import { ModeToggle } from './ThemeToggle'
+import Link from 'next/link'
 
 const Appbar = () => {
   const { data: session } = useSession()
@@ -14,7 +14,7 @@ const Appbar = () => {
     <header className="bg-white/70 backdrop-blur-md border-b border-zinc-300 shadow-md">
       <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-light tracking-widest text-zinc-700 uppercase">
-          MCQ Hub
+          <Link href={"/home"}>MCQ Hub</Link>
         </h1>
         <div className="flex items-center space-x-6">
           {session ? (

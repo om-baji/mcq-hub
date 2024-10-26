@@ -64,6 +64,7 @@ const page = () => {
       {selectedQuestion !== null && (
         <div className='mt-6 p-2 rounded shadow w-full h-screen'>
           <Question
+            key={selectedQuestion}
             title={questions[selectedQuestion].question}
             options={questions[selectedQuestion].options}
             tag={questions[selectedQuestion].tag}

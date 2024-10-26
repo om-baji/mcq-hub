@@ -41,6 +41,10 @@ const mcqSchema : Schema <MCQ> = new Schema({
     tag : {
         type : String,
         required : [true,"Required Field"]
+    },
+    correctAnswer : {
+        type : String,
+        required : [true,"Required Field"]
     }
 })
 
