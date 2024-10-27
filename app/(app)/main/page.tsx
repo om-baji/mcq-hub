@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import Question from '@/components/Question';
+import { aiQuestion } from '@/server/actions/gemini';
 
 const page = () => {
   const [questions, setQuestions] = useState<MCQ[] | null>(null);
@@ -17,11 +18,12 @@ const page = () => {
 
   const onFind = async () => {
     try {
-      const response = await getQuestion(tag as string, limit || 0);
+      const response = await aiQuestion( limit || 0, tag as string);
       if (!response.questions) throw new Error('Something went wrong!');
       setQuestions(response.questions || null);
       return { success: true, message: 'Successful fetch' };
     } catch (e) {
+      console.log(e)
       toast({ title: 'Error fetching questions' });
       return { success: false, message: 'Unsuccessful fetch' };
     }

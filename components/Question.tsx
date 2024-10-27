@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button';
 
 interface QuestionTypes {
@@ -12,20 +12,6 @@ const Question = ({ title, tag, options, correct }: QuestionTypes) => {
     const [selected, setSelectedAnswer] = useState<string | null>(null);
     const [isChecked, setisChecked] = useState<boolean>(false);
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
-    const [formattedtTag, setFormattedTag] = useState<string>("");
-
-    useEffect(() => {
-        if (tag.trim().includes(" ")) {
-            const results = tag.split(" ");
-            // console.log(results.join().replace(",", "").toLowerCase())
-            setFormattedTag(results.join().replace(",", "").toLowerCase())
-
-        } else {
-            setFormattedTag(tag.toLowerCase())
-        }
-
-    }, []);
-
 
     const handleSelect = (option: string) => {
         setSelectedAnswer(option);
@@ -35,7 +21,8 @@ const Question = ({ title, tag, options, correct }: QuestionTypes) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-[30%_70%] h-full w-full p-2 bg-white/70 backdrop-blur-md border border-zinc-300 rounded-lg shadow-md">
             <div className="hidden md:flex justify-center items-center text-lg font-semibold text-zinc-700 bg-neutral-300">
-                <img src={`/${formattedtTag}.png`} alt={tag} />
+                { }
+                <img src={"https://images.unsplash.com/photo-1520509414578-d9cbf09933a1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y29tcHV0ZXIlMjBzY2llbmNlfGVufDB8fDB8fHww"} alt={tag} />
             </div>
             <div className="flex flex-col justify-start md:justify-center gap-4 mx-8">
                 <div>
