@@ -1,59 +1,77 @@
 # MCQ Hub
 
-MCQ Hub is an interactive platform built to manage Multiple Choice Questions (MCQs). It allows users to create, manage, and take quizzes. The application is built using Next.js, Prisma, Postgres, and styled with Tailwind CSS. Authentication is implemented using NextAuth with providers such as Google and GitHub.
+MCQ Hub is a modern, AI-powered platform for multiple-choice quizzes. The application includes timed quizzes, real-time feedback, and AI-generated questions, making it ideal for learning and testing knowledge across various domains.
+
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- **User Authentication**: Secure authentication using NextAuth with Google and GitHub providers.
-- **MCQ Management**: Create, update, and delete MCQs.
-- **Quiz Creation**: Allows users to generate quizzes based on available MCQs.
-- **Quiz Attempting**: Users can attempt quizzes and get results.
-- **Responsive Design**: Fully responsive layout using Tailwind CSS for mobile and desktop devices.
-- **Server Actions**: Efficient handling of server-side operations using Next.js server actions.
+- **User Authentication:** Secure sign-up, login, and logout functionality with email verification.
+- **AI-Powered Quizzes:** Uses the Gemini AI API for generating dynamic quiz questions.
+- **Timed Quizzes:** Customizable time limits for each quiz session.
+- **Real-time Feedback:** Immediate evaluation of answers with a responsive UI.
+- **Progress Tracking:** Track and analyze quiz performance over time.
+- **Responsive Design:** Mobile-friendly UI with modern, smooth transitions and rounded aesthetics.
 
 ## Tech Stack
 
-- **Frontend**: Next.js, Tailwind CSS
-- **Backend**: Next.js server actions, Mongoose, Postgres database
-- **Authentication**: NextAuth (Google and GitHub providers)
-- **Database**: MongoDB
+- **Frontend:** Next.js, ShadCN, Tailwind CSS
+- **Backend:** Next.js server actions, Node.js
+- **Database:** MongoDB
+- **AI Integration:** Gemini AI API
+- **Authentication:** NextAuth with JWT (supports Google, GitHub, and custom credentials)
+- **Other Libraries:** Axios for data fetching, React Hook Form for form handling, Zod for validation
 
 ## Installation
 
-To set up MCQ Hub locally, follow these steps:
-
-1. Clone the repository:
+1. **Clone the repository**
     ```bash
     git clone https://github.com/om-baji/mcq-hub.git
     cd mcq-hub
     ```
 
-2. Install the dependencies:
+2. **Install dependencies**
     ```bash
     npm install
     ```
 
-3. Set up your environment variables in a `.env` file:
-    ```
-    DATABASE_URL=your_mongo_database_url
-    NEXTAUTH_URL=http://localhost:3000
-    NEXTAUTH_SECRET=your_nextauth_secret
-    GITHUB_ID=your_github_client_id
-    GITHUB_SECRET=your_github_client_secret
-    GOOGLE_CLIENT_ID=your_google_client_id
-    GOOGLE_CLIENT_SECRET=your_google_client_secret
-    ```
+3. **Configure environment variables** (see [Configuration](#configuration) for details)
 
-4. Run database migrations:
+4. **Run database migrations**
     ```bash
     npx prisma migrate dev
     ```
 
-5. Start the development server:
+5. **Start the application**
     ```bash
     npm run dev
     ```
 
-The application will be running at `http://localhost:3000`.
+6. Access the app at `http://localhost:3000`.
 
+## Usage
 
+- **Quiz Creation:** Create quizzes by adding questions, options, tags, and setting the correct answer.
+- **AI-Powered Questions:** Leverage Gemini AI for dynamic and engaging quiz questions.
+- **Taking Quizzes:** Choose a quiz, answer questions, and receive instant feedback.
+- **Timed Sessions:** Complete quizzes within the set time for an added challenge.
+  
+## Configuration
+
+Add a `.env` file in the root directory with the following variables:
+
+```plaintext
+DATABASE_URL=your_mongodb_url
+JWT_SECRET=your_jwt_secret
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+GEMINI_API_KEY=your_gemini_api_key
+```
