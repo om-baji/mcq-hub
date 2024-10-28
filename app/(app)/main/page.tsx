@@ -1,29 +1,35 @@
 'use client'
-import { Input } from '@/components/ui/input';
-import { MCQ } from '@/models/dbModels';
-import { getQuestion } from '@/server/actions/getQuestion';
-import { useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast';
 import Question from '@/components/Question';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
+import { MCQ } from '@/models/dbModels';
 import { aiQuestion } from '@/server/actions/gemini';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
-const page = () => {
+const Page = () => {
   const [questions, setQuestions] = useState<MCQ[] | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
-  const [limit, setLimit] = useState<number | null>(null);
+  const [limit, setLimit] = useState<number>(10);
+  const [error, setError] = useState<string | null>(null);
+
   const search = useSearchParams();
   const tag = search.get('id');
 
   const onFind = async () => {
+    if (limit < 10 || limit > 25) {
+      setError("Maximum 25 questions at a time, Min. 10, time must be 5, 10, or 15 minutes!");
+      return;
+    }
+
     try {
-      const response = await aiQuestion( limit || 0, tag as string);
+      const response = await aiQuestion(limit || 0, tag as string);
       if (!response.questions) throw new Error('Something went wrong!');
       setQuestions(response.questions || null);
       return { success: true, message: 'Successful fetch' };
     } catch (e) {
-      console.log(e)
+      console.log(e);
       toast({ title: 'Error fetching questions' });
       return { success: false, message: 'Unsuccessful fetch' };
     }
@@ -35,28 +41,39 @@ const page = () => {
 
   if (!questions) {
     return (
-      <div className='flex justify-center items-center h-screen bg-gray-50'>
+      <div className='flex justify-center items-center h-screen bg-gray-300 '>
         <div className='flex flex-col items-center space-y-4'>
           <Input
             placeholder='Enter limit'
-            className='w-64 p-2 border border-gray-300 rounded shadow'
+            type='number'
+            min={5}
+            max={20}
+            className='w-64 p-2 border border-gray-600 bg-neutral-200 rounded '
             onChange={e => setLimit(parseInt(e.target.value))}
           />
+
           <Button className='w-32' onClick={onFind}>
-            Find Questions
-          </Button> 
+            Start
+          </Button>
+
+          {error && (
+            <small className="text-sm rounded bg-red-500 p-4 font-semibold">
+              {error}
+            </small>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className='flex flex-col items-center h-screen bg-gray-100'>
-      <div className='flex w-full space-x-4 p-4 bg-white shadow rounded justify-evenly'>
+    <div className='flex flex-col items-center h-screen bg-gray-300 text-white'>
+      <div className='flex w-full space-x-4 p-4 bg-gray-200 shadow-lg rounded justify-evenly overflow-y-scroll'>
         {questions.map((_, index) => (
           <Button
             key={index}
-            className={`px-4 py-2 ${selectedQuestion === index ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'}`}
+            className={`px-4 py-2 rounded-full ${selectedQuestion === index ? 'bg-zinc-500 text-white' : 'bg-gray-800'
+              }`}
             onClick={() => handleQuestionSelect(index)}
           >
             {index + 1}
@@ -64,7 +81,7 @@ const page = () => {
         ))}
       </div>
       {selectedQuestion !== null && (
-        <div className='mt-6 p-2 rounded shadow w-full h-screen'>
+        <div className='rounded-lg shadow-lg w-full h-[85vh]'>
           <Question
             key={selectedQuestion}
             title={questions[selectedQuestion].question}
@@ -78,4 +95,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
