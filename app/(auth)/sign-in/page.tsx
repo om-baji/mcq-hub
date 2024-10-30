@@ -9,6 +9,7 @@ import {
   FormLabel
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
 import { signInSchema, signinTypes } from '@/schemas/signInSchema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -34,10 +35,12 @@ const SignUp = () => {
     });
 
     if (result?.error) {
-    
       console.error("Login failed:", result.error);
+      toast({
+        title : "Login failed",
+        description : "Wrong password!"
+      })
     } else {
-     
       router.push("/home");
     }
   }
@@ -48,11 +51,12 @@ const SignUp = () => {
 
   return (
     <>
-      <main className='flex flex-col justify-center items-center h-screen gap-4'>
+      <main className='flex flex-col justify-center items-center h-screen gap-4 mx-auto px-4 sm:px-0'>
 
-        <div className='shadow-lg rounded-sm p-10 min-w-[400px]'>
+        <div className='shadow-lg rounded-sm p-6 sm:p-10 w-full max-w-md'>
           <span className="scroll-m-20 text-xl font-semibold tracking-tight">
-            Login</span>
+            Login
+          </span>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}
               className='space-y-6'>
@@ -89,18 +93,16 @@ const SignUp = () => {
                 )}
               />
               <Button 
-                className="space-y-4"
+                className="space-y-4 w-full"
                 disabled={isSubmitting}
                 type="submit">{
                   isSubmitting ? "Loading..." : "Sign In"
                 }</Button>
             </form>
-
           </Form>
-          <Link className='text-zinc-600 space-y-4'
-          href={"/sign-up"}>Dont have an account? <span className='underline text-zinc-800'>Register</span></Link>
+          <Link className='text-zinc-600 mt-4 block text-center'
+            href={"/sign-up"}>Don't have an account? <span className='underline text-zinc-800'>Register</span></Link>
         </div>
-
       </main>
     </>
   )

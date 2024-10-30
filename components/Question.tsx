@@ -18,7 +18,7 @@ const Question = ({ title, tag, options, correct}: QuestionTypes) => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
             <div className="grid-cols-1 w-full p-4 md:flex md:space-x-4 bg-zinc-100 rounded-lg shadow-lg">
-                <div className=" md:flex md:w-1/3 items-center justify-center bg-neutral-300 rounded-lg overflow-hidden">
+                <div className=" hidden md:flex md:w-1/3 items-center justify-center bg-neutral-300 rounded-lg overflow-hidden">
                     <img
                         className="max-h-1/4 md:h-full w-full object-cover"
                         src="https://images.unsplash.com/photo-1520509414578-d9cbf09933a1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y29tcHV0ZXIlMjBzY2llbmNlfGVufDB8fDB8fHww"

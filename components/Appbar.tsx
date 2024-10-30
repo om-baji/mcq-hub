@@ -29,7 +29,7 @@ const Appbar = () => {
                   title : "Logout successfully!"
                 })
 
-                router.replace("/sign-up")
+                router.push("/sign-up")
               }}
               className="border border-zinc-400 hover:border-zinc-600 px-5 py-2 rounded-lg text-sm font-light text-zinc-700 hover:bg-zinc-200 transition-all duration-300">
                 Logout

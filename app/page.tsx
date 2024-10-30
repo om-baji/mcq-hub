@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import CustomCard from '@/components/CustomCard'
+import Popup from '@/components/Popup'
 
 const page = () => {
   return (
@@ -21,9 +22,8 @@ const page = () => {
           <ChevronRight className="h-4 w-4" />
           <Link href={"/sign-in"}>Get Started</Link>
         </Button>
-      </div>
 
-      
+      </div>
 
     </div>
   )

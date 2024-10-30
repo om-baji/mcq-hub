@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import Popup from "./Popup";
 
 const CustomCard = ({ title, description }: {
     title: string;
@@ -27,11 +28,7 @@ const CustomCard = ({ title, description }: {
             </CardContent>
 
             <CardFooter>
-                <Button
-                    onClick={() => router.replace(`/main?id=${title}`)}
-                    variant="outline">
-                    Solve!
-                </Button>
+                <Popup tag={title}/>
             </CardFooter>
         </Card>
     )

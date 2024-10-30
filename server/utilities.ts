@@ -48,6 +48,11 @@ export const subjects = [
     description:
       "Focuses on CI/CD pipelines, automation tools, and containerization technologies like Kubernetes.",
   },
+  {
+    title: "Internet of Things",
+    description:
+      "Focuses on Iot, automation tools, and smart industries.",
+  },
 ];
 
 export const backgrounds = {

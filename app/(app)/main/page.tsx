@@ -1,69 +1,61 @@
 'use client'
 import Question from '@/components/Question';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { MCQ } from '@/models/dbModels';
 import { aiQuestion } from '@/server/actions/gemini';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 const Page = () => {
   const [questions, setQuestions] = useState<MCQ[] | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
-  const [limit, setLimit] = useState<number>(10);
-  const [error, setError] = useState<string | null>(null);
-
+  const [loading, setLoading] = useState<boolean>(true);
   const search = useSearchParams();
-  const tag = search.get('id');
 
-  const onFind = async () => {
-    if (limit < 10 || limit > 25) {
-      setError("Maximum 25 questions at a time, Min. 10, time must be 5, 10, or 15 minutes!");
-      return;
-    }
+  const fetchedOnce = useRef(false)
 
-    try {
-      const response = await aiQuestion(limit || 0, tag as string);
-      if (!response.questions) throw new Error('Something went wrong!');
-      setQuestions(response.questions || null);
-      return { success: true, message: 'Successful fetch' };
-    } catch (e) {
-      console.log(e);
-      toast({ title: 'Error fetching questions' });
-      return { success: false, message: 'Unsuccessful fetch' };
-    }
-  };
+  useEffect(() => {
+    if (fetchedOnce.current) return; 
+    fetchedOnce.current = true; 
+
+    const getQuestions = async () => {
+      const tag = search.get('id') || "";
+      const num = search.get('limit') || "0";
+      const parsedLimit = parseInt(num);
+
+      try {
+        const response = await aiQuestion(parsedLimit, tag);
+        if (!response.questions) throw new Error('Something went wrong!');
+        setQuestions(response.questions);
+      } catch (e) {
+        console.error(e);
+        toast({ title: 'Error fetching questions' });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getQuestions();
+  }, [search]);
 
   const handleQuestionSelect = (index: number) => {
     setSelectedQuestion(index);
   };
 
-  if (!questions) {
+  if (loading) {
     return (
-      <div className='flex justify-center items-center h-screen bg-gray-300 '>
-        <div className='flex flex-col items-center space-y-4'>
-          <Input
-            placeholder='Enter limit'
-            type='number'
-            min={5}
-            max={20}
-            className='w-64 p-2 border border-gray-600 bg-neutral-200 rounded '
-            onChange={e => setLimit(parseInt(e.target.value))}
-          />
-
-          <Button className='w-32' onClick={onFind}>
-            Start
-          </Button>
-
-          {error && (
-            <small className="text-sm rounded bg-red-500 p-4 font-semibold">
-              {error}
-            </small>
-          )}
-        </div>
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-800 text-gray-200">
+        <ReloadIcon className="animate-spin text-gray-300 w-12 h-12" />
+        <p className="mt-4 text-lg font-semibold text-gray-200">Loading...</p>
       </div>
     );
+  }
+
+  if (!questions) {
+    toast({ title: "Unsuccessful fetch" });
+    return <div>No questions found.</div>;
   }
 
   return (
@@ -72,8 +64,7 @@ const Page = () => {
         {questions.map((_, index) => (
           <Button
             key={index}
-            className={`px-4 py-2 rounded-full ${selectedQuestion === index ? 'bg-zinc-500 text-white' : 'bg-gray-800'
-              }`}
+            className={`px-4 py-2 rounded-full ${selectedQuestion === index ? 'bg-zinc-500 text-white' : 'bg-gray-800'}`}
             onClick={() => handleQuestionSelect(index)}
           >
             {index + 1}

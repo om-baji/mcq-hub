@@ -1,34 +1,34 @@
 'use server'
+import { MCQ } from "@/models/dbModels";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export async function aiQuestion(limit : number, tag : string) {
+export async function aiQuestion(limit: number, tag: string) {
     try {
-
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        
-        const promt = `Give ${limit.toString()} mcq question(s) on advanced, high level and core ${tag}, it should return an array of a objects with an options array and question and also a correctAnswer field and a tag field with subject name(This subject name should be same as i have given), questions should not be repeated`;
 
-        const result = await model.generateContent(promt);
+        const prompt = `Give ${limit} MCQ question(s) on advanced, high-level, and core ${tag}. It should return an array of objects with fields for options, question, correctAnswer, and tag with the subject name matching my input. Avoid repeated questions.`;
 
-        const questions = JSON.parse(result.response.text().replaceAll('```','').replace('json',''))
+        const result = await model.generateContent(prompt);
+        let responseText = await result.response.text();
 
-        // console.log(questions)
+        responseText = responseText.replace(/```|json/gi, '').trim();
+
+        const questions  = JSON.parse(responseText);
+
+        // console.log(questions);
 
         return {
-            success : true,
-            message : "Succesfull fetch",
+            success: true,
+            message: "Successful fetch",
             questions
-        }
-        
-        
+        };
     } catch (e) {
-
-        console.log(e)
+        console.error("Error parsing JSON response:", e);
 
         return {
-            success : false,
-            message : "Something went wrong!"
-        }
+            success: false,
+            message: "Something went wrong!"
+        };
     }
 }

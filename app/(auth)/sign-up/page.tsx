@@ -15,7 +15,6 @@ import { signup } from '@/server/actions/sign-up';
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from "react-hook-form";
 
 const SignUp = () => {
@@ -31,9 +30,7 @@ const SignUp = () => {
 
   const router = useRouter()
 
-  const { formState: { errors, isSubmitting }, setError } = form;
-
-  const [user, setUser] = useState("");
+  const { formState: { errors, isSubmitting }} = form;
 
   const onSubmit = async (data: signUpTypes) => {
 
@@ -51,7 +48,7 @@ const SignUp = () => {
       }
 
       toast({
-        title: "Signup Successfull!",
+        title: "Signup Successful!",
         description: user.message,
         duration: 2000
       })
@@ -71,24 +68,14 @@ const SignUp = () => {
     }
   }
 
-  // useEffect(() => {
-  //   const checkName = async () => {
-  //     const response = await checkUsername(user);
-  //     if (!response.success) {
-  //       setError("username", { message: response.message })
-  //     }
-  //   }
-
-  //   checkName();
-  // }, [user])
-
   return (
     <>
-      <main className='flex flex-col justify-center items-center h-screen gap-4'>
+      <main className='flex flex-col justify-center items-center h-screen gap-4 px-4 sm:px-0'>
 
-        <div className='shadow-lg rounded-sm p-10 min-w-[400px]'>
+        <div className='shadow-lg rounded-sm p-6 sm:p-10 w-full max-w-md'>
           <span className="scroll-m-20 text-xl font-semibold tracking-tight">
-            Register Now</span>
+            Register Now
+          </span>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}
               className='space-y-6'>
@@ -98,9 +85,9 @@ const SignUp = () => {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="Phone Number" {...field} />
+                      <Input placeholder="someone" {...field} />
                     </FormControl>
                     {errors.username ? (
                       <FormDescription className="text-red-500">{errors.username.message}</FormDescription>
@@ -142,17 +129,17 @@ const SignUp = () => {
                   </FormItem>
                 )}
               />
-              <Button disabled={isSubmitting}
+              <Button 
+                className="w-full" 
+                disabled={isSubmitting}
                 type="submit">{
                   isSubmitting ? "Loading..." : "Sign Up"
                 }</Button>
             </form>
-
           </Form>
-          <Link className='text-zinc-600'
+          <Link className='text-zinc-600 mt-4 block text-center'
             href={"/sign-in"}>Already have an account? <span className='underline text-zinc-800'>Login</span></Link>
         </div>
-
       </main>
     </>
   )
