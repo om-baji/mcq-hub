@@ -34,8 +34,8 @@ MCQ Hub is a modern, AI-powered platform for multiple-choice quizzes. The applic
 
 ![Screenshot_20241030_123343](https://github.com/user-attachments/assets/a7045076-23b7-4758-a3fe-255389e04efe)
 ![Screenshot_20241030_123358](https://github.com/user-attachments/assets/79e4cab9-c06f-46ea-87b7-5481cca771b7)
-![Screenshot_20241030_123509](https://github.com/user-attachments/assets/2c893704-4753-43c2-a8d7-205f55da62a2)
 ![Screenshot_20241030_123430](https://github.com/user-attachments/assets/22d1d794-ee0c-4251-9f16-cce998339429)
+![Screenshot_20241030_123509](https://github.com/user-attachments/assets/2c893704-4753-43c2-a8d7-205f55da62a2)
 ![Screenshot_20241030_123447](https://github.com/user-attachments/assets/c23b8b01-6750-48dc-ab10-2b5d0bec7a3a)
 
 
