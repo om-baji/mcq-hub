@@ -13,17 +13,26 @@ const Page = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const search = useSearchParams();
+  const [time, setTime] = useState(0)
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
 
   const fetchedOnce = useRef(false)
 
   useEffect(() => {
-    if (fetchedOnce.current) return; 
-    fetchedOnce.current = true; 
+    if (fetchedOnce.current) return;
+    fetchedOnce.current = true;
 
     const getQuestions = async () => {
       const tag = search.get('id') || "";
       const num = search.get('limit') || "0";
+
       const parsedLimit = parseInt(num);
+
+      if (parsedLimit == 10) setTime(3 * 60)
+      else if (parsedLimit == 15) setTime(5 * 60)
+      else setTime(7 * 60)
 
       try {
         const response = await aiQuestion(parsedLimit, tag);
@@ -40,9 +49,29 @@ const Page = () => {
     getQuestions();
   }, [search]);
 
+  useEffect(() => {
+    if (time > 0) {
+      timerRef.current = setInterval(() => {
+        setTime((prevTime) => prevTime - 1);
+      }, 1000);
+    }
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [time]);
+
   const handleQuestionSelect = (index: number) => {
     setSelectedQuestion(index);
   };
+
+  if (time < 0) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-red-900 text-white">
+        <h1 className="text-4xl font-bold">Test Over</h1>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -61,6 +90,7 @@ const Page = () => {
   return (
     <div className='flex flex-col items-center h-screen bg-gray-300 text-white'>
       <div className='flex w-full space-x-4 p-4 bg-gray-200 shadow-lg rounded justify-evenly overflow-y-scroll'>
+
         {questions.map((_, index) => (
           <Button
             key={index}
@@ -82,6 +112,9 @@ const Page = () => {
           />
         </div>
       )}
+      <div className="fixed bottom-4 right-4 bg-gray-800 bg-opacity-75 text-yellow-400 text-xl font-semibold p-2 rounded-lg shadow-lg">
+        Time Left: {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, '0')}
+      </div>
     </div>
   );
 };
