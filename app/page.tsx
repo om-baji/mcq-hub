@@ -1,9 +1,6 @@
-import React from 'react'
-import { ChevronRight } from "lucide-react"
 import { Button } from '@/components/ui/button'
+import { ChevronRight } from "lucide-react"
 import Link from 'next/link'
-import CustomCard from '@/components/CustomCard'
-import Popup from '@/components/Popup'
 
 const page = () => {
   return (

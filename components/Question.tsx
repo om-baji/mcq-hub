@@ -10,6 +10,7 @@ interface QuestionTypes {
 const Question = ({ title, tag, options, correct}: QuestionTypes) => {
     const [selected, setSelectedAnswer] = useState<string | null>(null);
     const [showAnswer, setShowAnswer] = useState<boolean>(false);
+    // const isDone = useRef<boolean>(false);
 
     const handleSelect = (option: string) => {
         setSelectedAnswer(option);

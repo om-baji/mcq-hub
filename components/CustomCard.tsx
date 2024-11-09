@@ -5,17 +5,13 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+} from "@/components/ui/card";
 import Popup from "./Popup";
 
 const CustomCard = ({ title, description }: {
     title: string;
     description: string;
 }) => {
-
-    const router = useRouter();
 
     return (
         <Card>

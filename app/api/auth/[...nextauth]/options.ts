@@ -1,76 +1,108 @@
-import NextAuth, { AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import Github from "next-auth/providers/github";
-import dbConnect from "@/server/db";
 import { userModel } from "@/models/dbModels";
+import dbConnect from "@/server/db";
 import bcrypt from 'bcryptjs';
+import { AuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
 
-export const authOptions : AuthOptions = {
-    providers : [
+// Define credentials structure
+// interface Credentials {
+//     email: string;
+//     password: string;
+// }
+
+// Define User type with both `id` and `_id` fields
+interface User {
+    id: string;  // Required by NextAuth's User type
+    _id: string;
+    email: string;
+    username: string;
+    name: string;
+    password: string;
+    isVerified: boolean;
+}
+
+// Extend NextAuth Session with custom user fields
+interface ExtendedSession extends Session {
+    user: {
+        id: string;
+        _id: string;
+        email: string;
+        name: string;
+        username: string;
+        isVerified: boolean;
+    };
+}
+
+// Extend JWT with custom fields
+interface ExtendedJWT extends JWT {
+    id: string;
+    _id: string;
+    email: string;
+    username: string;
+    name: string;
+    isVerified: boolean;
+}
+
+export const authOptions: AuthOptions = {
+    providers: [
         CredentialsProvider({
-            name : "Email",
-            credentials : {
-                email : { label : "Email", placeholder : "someone@gmail.com"},
-                password : { label : "Password" , placeholder : "Password"}
+            name: "Email",
+            credentials: {
+                email: { label: "Email", placeholder: "someone@gmail.com", type: "email" },
+                password: { label: "Password", placeholder: "Password", type: "password" }
             },
-            async authorize(credentials : any) : Promise<any>{
+            async authorize(credentials): Promise<User | null> {
+                if (!credentials?.email || !credentials?.password) return null;
+
                 await dbConnect();
 
-                try {
-                    
-                    const user = await userModel.findOne({
-                        "$or" : [
-                            { username : credentials.identifier},
-                            { email : credentials.identifier }
-                        ]
-                    })
+                const user = await userModel.findOne({
+                    $or: [
+                        { username: credentials.email },
+                        { email: credentials.email }
+                    ]
+                }) as User | null;
 
-                    if(!user) throw new Error("User not found!")
-                    
-                    if(!user.isVerified) throw new Error("User not verified, register again!")
+                if (!user || !user.isVerified) return null;
 
-                    const isValid = await bcrypt.compare(credentials.password , user.password)
-
-                    console.log(isValid)
-
-                    if(isValid) return user;
-
-                    throw new Error('Wrong password!')
-
-                } catch (e : any) {
-                    throw new Error(e)
-                }
+                const isValid = await bcrypt.compare(credentials.password, user.password);
+                return isValid ? { ...user, id: user._id } : null;
             }
         }),
-        Github({
-            clientId : process.env.GITHUB_ID || "",
-            clientSecret : process.env.GITHUB_SECRET || ""
+        GithubProvider({
+            clientId: process.env.GITHUB_ID || "",
+            clientSecret: process.env.GITHUB_SECRET || ""
         })
     ],
-    secret : process.env.AUTH_SECRET,
-    session : { strategy : "jwt" },
-    callbacks : {
-        async jwt({token,user}) : Promise<JWT>{
-            if(user){
-                token._id = user._id,
-                token.email = user.email,
-                token.username = user.username
-                token.name = user.name
+    secret: process.env.AUTH_SECRET,
+    session: { strategy: "jwt" },
+    callbacks: {
+        async jwt({ token, user }): Promise<ExtendedJWT> {
+            if (user) {
+                token = {
+                    ...token,
+                    id: user.id,
+                    _id: user._id,
+                    email: user.email,
+                    username: user.username,
+                    name: user.name,
+                    isVerified: user.isVerified
+                };
             }
-            return token
+            return token as ExtendedJWT;
         },
-        async session({session,token}) : Promise<any>{
-            if(token){
-                session.user = {
-                    _id: token._id,
-                    email: token.email,
-                    name: token.name,
-                    username : token.username,
-                    isVerified: token.isVerified,
-                  };
-            }
-            return session;
+        async session({ session, token }): Promise<ExtendedSession> {
+            session.user = {
+                // id: token.id as string,
+                _id: token._id as string,
+                email: token.email as string,
+                name: token.name as string,
+                username: token.username as string,
+                isVerified: token.isVerified as boolean
+            };
+            return session as ExtendedSession;
         }
     }
-}
+};

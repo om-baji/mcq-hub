@@ -101,7 +101,7 @@ const SignUp = () => {
             </form>
           </Form>
           <Link className='text-zinc-600 mt-4 block text-center'
-            href={"/sign-up"}>Don't have an account? <span className='underline text-zinc-800'>Register</span></Link>
+            href={"/sign-up"}>Don&apost have an account? <span className='underline text-zinc-800'>Register</span></Link>
         </div>
       </main>
     </>
